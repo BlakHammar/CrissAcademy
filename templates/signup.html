@@ -1,0 +1,146 @@
+{% extends "base.html" %}
+
+{% block title %}Sign Up - Crissa Academy{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="mb-4">Sign Up</h1>
+    <form method="POST" id="signupForm">
+        {{ form.hidden_tag() }}
+        <div class="mb-3">
+            {{ form.username.label(class="form-label") }}
+            {{ form.username(class="form-control") }}
+            {% for error in form.username.errors %}
+                <span class="text-danger">{{ error }}</span>
+            {% endfor %}
+        </div>
+        <div class="mb-3">
+            {{ form.email.label(class="form-label") }}
+            {{ form.email(class="form-control") }}
+            {% for error in form.email.errors %}
+                <span class="text-danger">{{ error }}</span>
+            {% endfor %}
+        </div>
+        <div class="mb-3">
+            {{ form.password.label(class="form-label") }}
+            {{ form.password(class="form-control") }}
+            <div id="passwordStrength" class="mt-2"></div>
+            <div id="passwordRequirements" class="mt-2">
+                <p>Password must contain:</p>
+                <ul>
+                    <li id="lengthReq">At least 8 characters</li>
+                    <li id="uppercaseReq">At least one uppercase letter</li>
+                    <li id="lowercaseReq">At least one lowercase letter</li>
+                    <li id="numberReq">At least one number</li>
+                    <li id="specialReq">At least one special character</li>
+                </ul>
+            </div>
+            {% for error in form.password.errors %}
+                <span class="text-danger">{{ error }}</span>
+            {% endfor %}
+        </div>
+        <div class="mb-3">
+            {{ form.confirm_password.label(class="form-label") }}
+            {{ form.confirm_password(class="form-control") }}
+            {% for error in form.confirm_password.errors %}
+                <span class="text-danger">{{ error }}</span>
+            {% endfor %}
+        </div>
+        {{ form.submit(class="btn btn-primary") }}
+    </form>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const passwordInput = document.getElementById('password');
+    const passwordStrength = document.getElementById('passwordStrength');
+    const form = document.getElementById('signupForm');
+
+    const lengthReq = document.getElementById('lengthReq');
+    const uppercaseReq = document.getElementById('uppercaseReq');
+    const lowercaseReq = document.getElementById('lowercaseReq');
+    const numberReq = document.getElementById('numberReq');
+    const specialReq = document.getElementById('specialReq');
+
+    function updatePasswordStrength(password) {
+        let strength = 0;
+        let feedback = '';
+
+        // Check length
+        if (password.length >= 8) {
+            strength++;
+            lengthReq.classList.add('text-success');
+        } else {
+            lengthReq.classList.remove('text-success');
+        }
+
+        // Check uppercase
+        if (password.match(/[A-Z]/)) {
+            strength++;
+            uppercaseReq.classList.add('text-success');
+        } else {
+            uppercaseReq.classList.remove('text-success');
+        }
+
+        // Check lowercase
+        if (password.match(/[a-z]/)) {
+            strength++;
+            lowercaseReq.classList.add('text-success');
+        } else {
+            lowercaseReq.classList.remove('text-success');
+        }
+
+        // Check numbers
+        if (password.match(/[0-9]/)) {
+            strength++;
+            numberReq.classList.add('text-success');
+        } else {
+            numberReq.classList.remove('text-success');
+        }
+
+        // Check special characters
+        if (password.match(/[^A-Za-z0-9]/)) {
+            strength++;
+            specialReq.classList.add('text-success');
+        } else {
+            specialReq.classList.remove('text-success');
+        }
+
+        switch (strength) {
+            case 0:
+            case 1:
+                feedback = '<span class="text-danger">Very weak</span>';
+                break;
+            case 2:
+                feedback = '<span class="text-warning">Weak</span>';
+                break;
+            case 3:
+                feedback = '<span class="text-info">Medium</span>';
+                break;
+            case 4:
+                feedback = '<span class="text-primary">Strong</span>';
+                break;
+            case 5:
+                feedback = '<span class="text-success">Very strong</span>';
+                break;
+        }
+
+        passwordStrength.innerHTML = feedback;
+    }
+
+    passwordInput.addEventListener('input', function() {
+        updatePasswordStrength(this.value);
+    });
+
+    form.addEventListener('submit', function(e) {
+        const password = passwordInput.value;
+        if (password.length < 8 || !password.match(/[A-Z]/) || !password.match(/[a-z]/) || !password.match(/[0-9]/) || !password.match(/[^A-Za-z0-9]/)) {
+            e.preventDefault();
+            alert('Password must meet all the requirements.');
+        }
+    });
+});
+</script>
+{% endblock %}

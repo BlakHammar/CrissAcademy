@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}Course Announcement - {{ course.title }} - Crissa Academy{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="mb-4">Send Announcement for {{ course.title }}</h1>
+    <a href="{{ url_for('main.instructor_dashboard') }}" class="btn btn-secondary mb-3">Back to Dashboard</a>
+
+    <form method="POST">
+        {{ form.hidden_tag() }}
+        <div class="mb-3">
+            {{ form.message.label(class="form-label") }}
+            {{ form.message(class="form-control", rows=5) }}
+            {% for error in form.message.errors %}
+                <span class="text-danger">{{ error }}</span>
+            {% endfor %}
+        </div>
+        {{ form.submit(class="btn btn-primary") }}
+    </form>
+</div>
+{% endblock %}

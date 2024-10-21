@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %}Course Enrollments - {{ course.title }} - Crissa Academy{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="mb-4">Enrollments for {{ course.title }}</h1>
+    <a href="{{ url_for('main.instructor_dashboard') }}" class="btn btn-secondary mb-3">Back to Dashboard</a>
+
+    {% if enrollments %}
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Student Name</th>
+                        <th>Email</th>
+                        <th>Registration Date</th>
+                        <th>Payment Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for enrollment in enrollments %}
+                    <tr>
+                        <td>{{ enrollment.user.username }}</td>
+                        <td>{{ enrollment.user.email }}</td>
+                        <td>{{ enrollment.registration_date.strftime('%Y-%m-%d %H:%M') }}</td>
+                        <td>
+                            <span class="badge bg-{{ 'success' if enrollment.payment_status == 'paid' else 'warning' }}">
+                                {{ enrollment.payment_status }}
+                            </span>
+                        </td>
+                        <td>
+                            <a href="#" class="btn btn-sm btn-primary">Contact Student</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <p class="alert alert-info">No enrollments for this course yet.</p>
+    {% endif %}
+</div>
+{% endblock %}

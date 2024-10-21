@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}Welcome to Criss Academy{% endblock %}
+
+{% block content %}
+<div class="jumbotron">
+    <h1 class="display-4">Welcome to Criss Academy</h1>
+    <p class="lead">Discover our world-class training courses and enhance your skills.</p>
+    <hr class="my-4">
+    <p>Browse our courses and start your learning journey today!</p>
+    <a class="btn btn-primary btn-lg" href="{{ url_for('main.courses') }}" role="button">View Courses</a>
+</div>
+
+<div class="row mt-5">
+    <div class="col-md-4">
+        <h2>Expert Instructors</h2>
+        <p>Learn from industry professionals with years of experience.</p>
+    </div>
+    <div class="col-md-4">
+        <h2>Flexible Learning</h2>
+        <p>Access course materials anytime, anywhere with our online platform.</p>
+    </div>
+    <div class="col-md-4">
+        <h2>Practical Skills</h2>
+        <p>Gain hands-on experience with real-world projects and exercises.</p>
+    </div>
+</div>
+{% endblock %}

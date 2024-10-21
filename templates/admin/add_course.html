@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block title %}Add New Course - Crissa Academy{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">Add New Course</h1>
+
+<form method="POST">
+    {{ form.hidden_tag() }}
+    <div class="mb-3">
+        {{ form.title.label(class="form-label") }}
+        {{ form.title(class="form-control") }}
+    </div>
+    <div class="mb-3">
+        {{ form.description.label(class="form-label") }}
+        {{ form.description(class="form-control") }}
+    </div>
+    <div class="mb-3">
+        {{ form.date.label(class="form-label") }}
+        {{ form.date(class="form-control") }}
+    </div>
+    <div class="mb-3">
+        {{ form.price.label(class="form-label") }}
+        {{ form.price(class="form-control") }}
+    </div>
+    <div class="mb-3">
+        {{ form.zoom_link.label(class="form-label") }}
+        {{ form.zoom_link(class="form-control") }}
+    </div>
+    <div class="mb-3">
+        {{ form.materials_link.label(class="form-label") }}
+        {{ form.materials_link(class="form-control") }}
+    </div>
+    {{ form.submit(class="btn btn-primary") }}
+</form>
+{% endblock %}

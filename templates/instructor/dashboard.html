@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block title %}Instructor Dashboard - Crissa Academy{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="mb-4">Instructor Dashboard</h1>
+    <a href="{{ url_for('main.add_course') }}" class="btn btn-primary mb-3">Add New Course</a>
+
+    {% if course_details %}
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Title</th>
+                        <th>Date</th>
+                        <th>Price</th>
+                        <th>Enrollments</th>
+                        <th>Revenue</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for detail in course_details %}
+                    <tr>
+                        <td>{{ detail.course.title }}</td>
+                        <td>{{ detail.course.date.strftime('%Y-%m-%d %H:%M') }}</td>
+                        <td>${{ "%.2f"|format(detail.course.price) }}</td>
+                        <td>{{ detail.enrollments }}</td>
+                        <td>${{ "%.2f"|format(detail.revenue) }}</td>
+                        <td>
+                            <span class="badge bg-{{ 'success' if detail.status == 'Upcoming' else 'secondary' }}">{{ detail.status }}</span>
+                        </td>
+                        <td>
+                            <div class="btn-group" role="group">
+                                <a href="{{ url_for('main.edit_course', course_id=detail.course.id) }}" class="btn btn-sm btn-secondary">Edit</a>
+                                <a href="{{ url_for('main.course_enrollments', course_id=detail.course.id) }}" class="btn btn-sm btn-info">View Enrollments</a>
+                                <button type="button" class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#rescheduleModal{{ detail.course.id }}">Reschedule</button>
+                                <a href="{{ url_for('main.course_announcement', course_id=detail.course.id) }}" class="btn btn-sm btn-primary">Send Announcement</a>
+                                {% if detail.status == 'Upcoming' %}
+                                    <form action="{{ url_for('main.cancel_course', course_id=detail.course.id) }}" method="POST" class="d-inline">
+                                        <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to cancel this course?')">Cancel</button>
+                                    </form>
+                                {% endif %}
+                            </div>
+                        </td>
+                    </tr>
+                    
+                    <!-- Reschedule Modal -->
+                    <div class="modal fade" id="rescheduleModal{{ detail.course.id }}" tabindex="-1" aria-labelledby="rescheduleModalLabel{{ detail.course.id }}" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="rescheduleModalLabel{{ detail.course.id }}">Reschedule Course</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <form action="{{ url_for('main.reschedule_course', course_id=detail.course.id) }}" method="POST">
+                                    <div class="modal-body">
+                                        <div class="mb-3">
+                                            <label for="new_date" class="form-label">New Date and Time</label>
+                                            <input type="datetime-local" class="form-control" id="new_date" name="new_date" required>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                        <button type="submit" class="btn btn-primary">Reschedule</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <p class="alert alert-info">You haven't created any courses yet.</p>
+    {% endif %}
+</div>
+{% endblock %}
